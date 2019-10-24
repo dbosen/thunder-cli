@@ -1,16 +1,16 @@
 <?php
 
-namespace Thunder\Command\Project;
+namespace Thunder\Command\Installation;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Thunder\Command\ProjectCommand;
+use Thunder\Command\InstallationCommand;
 use Thunder\Model\Installation;
 use Thunder\Service\InstallationManagerInterface;
 
-class GotoCommand extends ProjectCommand
+class GotoCommand extends InstallationCommand
 {
     /**
      * Allowed values for the destination.
@@ -31,8 +31,8 @@ class GotoCommand extends ProjectCommand
     protected function configure()
     {
         $this
-            ->setName('project:goto')
-            ->setAliases(['goto', 'pg'])
+            ->setName('installation:goto')
+            ->setAliases(['goto', 'ig'])
             ->addArgument(
                 'destination',
                 InputArgument::REQUIRED,
@@ -40,14 +40,14 @@ class GotoCommand extends ProjectCommand
             )
 
             ->addArgument(
-                'name',
+                'installation',
                 InputArgument::OPTIONAL,
                 'Choose the Thunder installation, in case multiple installations are configured. 
               Use thunder:list to show available installations',
                 'default'
             )
 
-            ->setDescription('Switch to specific Thunder project destination.');
+            ->setDescription('Change to a destination in a specific Thunder installation.');
     }
 
     /**
@@ -64,7 +64,7 @@ class GotoCommand extends ProjectCommand
             return 1;
         }
 
-        $installation = $this->installationManager->getInstallation($input->getArgument('name'));
+        $installation = $this->installationManager->getInstallation($input->getArgument('installation'));
         $destination = $input->getArgument('destination');
 
         $output->write($installation->getDirectory($destination), false, OutputInterface::OUTPUT_RAW);
@@ -73,7 +73,7 @@ class GotoCommand extends ProjectCommand
     protected function validateInput(InputInterface $input)
     {
         $destination = $input->getArgument('destination');
-        $installation = $input->getArgument('name');
+        $installation = $input->getArgument('installation');
 
         if (!empty($destination) && !in_array($destination, $this->allowedDestinations)) {
             throw new \InvalidArgumentException(

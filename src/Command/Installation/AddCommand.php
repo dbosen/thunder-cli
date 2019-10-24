@@ -1,6 +1,6 @@
 <?php
 
-namespace Thunder\Command\Project;
+namespace Thunder\Command\Installation;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,9 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Thunder\Command\ProjectCommand;
+use Thunder\Command\InstallationCommand;
 
-class AddCommand extends ProjectCommand
+class AddCommand extends InstallationCommand
 {
     /**
      * {@inheritdoc}
@@ -19,25 +19,25 @@ class AddCommand extends ProjectCommand
     protected function configure()
     {
         $this
-            ->setName('project:add')
-            ->setAliases(['padd', 'pa'])
+            ->setName('installation:add')
+            ->setAliases(['iadd', 'ia'])
             ->addArgument(
                 'base',
                 InputArgument::REQUIRED,
-                'The projects base directory.'
+                'The installation base directory.'
             )
 
             ->addOption(
-                'name',
+                'installation',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'The projects name.'
+                'The installation name.'
             )
             ->addOption(
                 'type',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'The projects type.'
+                'The installation type.'
             )
 
             ->setDescription('Add new local installation.');
@@ -48,7 +48,7 @@ class AddCommand extends ProjectCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $baseDirectory = $input->getArgument('base');
-        $name = $input->getOption('name');
+        $name = $input->getOption('installation');
         $type = $input->getOption('type');
 
         $questionHelper = $this->getHelper('question');
@@ -66,14 +66,14 @@ class AddCommand extends ProjectCommand
         if (!$name) {
             do {
                 $retry = false;
-                $question = new Question('Please enter the name of the project (defaults to "default"): ', 'default');
+                $question = new Question('Please enter the name of the installation (defaults to "default"): ', 'default');
                 $name = $questionHelper->ask($input, $output, $question);
 
                 if (empty($name)) {
                     $retry = true;
                 } elseif ($this->installationManager->isInstallation($name)) {
                     $confirmationQuestion = new ConfirmationQuestion(
-                        'Project configuration for "' . $name . '" project exists. Do you want to overwrite? ',
+                        'Installation configuration for the "' . $name . '" installation already exists. Do you want to overwrite? ',
                         false,
                         '/^(y|j)/i'
                     );
@@ -84,7 +84,7 @@ class AddCommand extends ProjectCommand
 
         if (!$type) {
             $question = new ChoiceQuestion(
-                'Please select the type of the project (defaults to thunder-develop): ',
+                'Please select the type of the installation (defaults to thunder-develop): ',
                 ['thunder-develop', 'thunder-project', 'drupal-project'],
                 0
             );

@@ -5,7 +5,7 @@ namespace Thunder\Command;
 use Symfony\Component\Console\Command\Command;
 use Thunder\Service\InstallationManagerInterface;
 
-abstract class ProjectCommand extends Command
+abstract class InstallationCommand extends Command
 {
     /**
      * The installation manager service.

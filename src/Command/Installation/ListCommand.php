@@ -1,13 +1,13 @@
 <?php
 
-namespace Thunder\Command\Project;
+namespace Thunder\Command\Installation;
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Thunder\Command\ProjectCommand;
+use Thunder\Command\InstallationCommand;
 
-class ListCommand extends ProjectCommand
+class ListCommand extends InstallationCommand
 {
     /**
      * {@inheritdoc}
@@ -15,9 +15,9 @@ class ListCommand extends ProjectCommand
     protected function configure()
     {
         $this
-            ->setName('project:list')
-            ->setAliases(['plist', 'pl'])
-            ->setDescription('List available Thunder and Drupal projects.');
+            ->setName('installation:list')
+            ->setAliases(['ilist', 'il'])
+            ->setDescription('List available Thunder and Drupal installations.');
     }
 
     /**

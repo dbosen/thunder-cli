@@ -1,16 +1,14 @@
 <?php
 
-namespace Thunder\Command\Project;
+namespace Thunder\Command\Develop;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
-use Thunder\Command\ProjectCommand;
+use Thunder\Command\DevelopCommand;
 
-class ResetCommand extends ProjectCommand
+class ReviewCommand extends DevelopCommand
 {
     /**
      * {@inheritdoc}
@@ -18,22 +16,14 @@ class ResetCommand extends ProjectCommand
     protected function configure()
     {
         $this
-            ->setName('project:reset')
-            ->setAliases(['reset', 'pr'])
-            ->addArgument(
-                'name',
-                InputArgument::OPTIONAL,
-                'Choose the Thunder installation, in case multiple installations are configured. 
-              Use thunder:list command to show available installations. Only projects of type thunder-develop can be reset',
-                'default'
-            )
-
-            ->setDescription('Reset all development repositories in a thunder-develop project to their current development head branch..');
+            ->setName('develop:review')
+            ->setAliases(['review', 'dr'])
+            ->addArgument('branch', InputArgument::REQUIRED, 'The branch to review.')
+            ->addArgument('installation', InputArgument::OPTIONAL, 'The installation to test in.', 'default')
+            ->addArgument('project', InputArgument::OPTIONAL, 'The project to review.', 'thunder')
+            ->setDescription('Install a project branch in a given thunder installation, run composer update and install thunder.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -45,28 +35,12 @@ class ResetCommand extends ProjectCommand
             return 1;
         }
 
-        $name = $input->getArgument('name');
-        $installation = $this->installationManager->getInstallation($name);
 
-        chdir($installation->getBaseDirectory());
-
-        $process = new Process(['composer', 'reset-repositories']);
-        $process->run();
-
-        foreach ($process as $type => $data) {
-            $output->write($data);
-        }
-
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        $output->writeln('');
     }
 
     protected function validateInput(InputInterface $input)
     {
-        $installationName = $input->getArgument('name');
+        $installationName = $input->getArgument('installation');
 
         if (!$this->installationManager->isInstallation($installationName)) {
             throw new \InvalidArgumentException(
@@ -87,5 +61,9 @@ class ResetCommand extends ProjectCommand
                 )
             );
         }
+
+        $projectName = $input->getArgument('project');
+
+
     }
 }

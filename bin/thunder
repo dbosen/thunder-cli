@@ -14,7 +14,7 @@ function thunder() {
   php="$(which php)"
 
   for i in "${@}"; do
-      if [[ "${i}" == "project:goto" || "${i}" == "goto" || "${i}" == "pg" ]]; then
+      if [[ "${i}" == "installation:goto" || "${i}" == "goto" || "${i}" == "pg" ]]; then
           cd "$("${php}" "${THUNDER_CLI_BIN_DIR}"/runner "$@")" || return
           return
       fi

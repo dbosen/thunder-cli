@@ -6,7 +6,7 @@ class Installation
 {
 
     /**
-     * The unique name of the Installation.
+     * The unique name of the installation.
      *
      * @var string $name
      */
