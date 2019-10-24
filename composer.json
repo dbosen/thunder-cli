@@ -1,6 +1,7 @@
 {
-    "type": "project",
     "name": "dbosen/thunder-cli",
+    "type": "library",
+    "description": "Command line interface for Thunder development.",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "prefer-stable": true,
