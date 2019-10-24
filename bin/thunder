@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+if [[ "${BASH_SOURCE[0]}" == /* ]]; then
+  THUNDER_CLI_BIN_DIR="$( dirname "${BASH_SOURCE[0]}" )"
+else
+  THUNDER_CLI_BIN_DIR="$( pwd )"/"$( dirname "${BASH_SOURCE[0]}" )"
+fi
+
+export THUNDER_CLI_BIN_DIR
+
+function thunder() {
+  local php=""
+
+  php="$(which php)"
+
+  for i in "${@}"; do
+      if [[ "${i}" == "project:goto" || "${i}" == "goto" || "${i}" == "pg" ]]; then
+          cd "$("${php}" "${THUNDER_CLI_BIN_DIR}"/runner "$@")" || return
+          return
+      fi
+  done
+
+  "${php}" "${THUNDER_CLI_BIN_DIR}"/runner "$@"
+}
+
