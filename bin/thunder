@@ -15,11 +15,11 @@ function thunder() {
 
   for i in "${@}"; do
       if [[ "${i}" == "installation:goto" || "${i}" == "goto" || "${i}" == "pg" ]]; then
-          cd "$("${php}" "${THUNDER_CLI_BIN_DIR}"/runner "$@")" || return
+          cd "$("${php}" "${THUNDER_CLI_BIN_DIR}"/console "$@")" || return
           return
       fi
   done
 
-  "${php}" "${THUNDER_CLI_BIN_DIR}"/runner "$@"
+  "${php}" "${THUNDER_CLI_BIN_DIR}"/console "$@"
 }
 

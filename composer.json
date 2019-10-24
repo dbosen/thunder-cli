@@ -55,7 +55,7 @@
     },
     "scripts": {
         "auto-scripts": {
-            "php bin/runner cache:clear": "script"
+            "cache:clear": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
